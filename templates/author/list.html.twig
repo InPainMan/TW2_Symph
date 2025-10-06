@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Liste des auteurs</title>
-</head>
-<body>
-    <h1>Liste des auteurs</h1>
-
-    {% if authors is defined and authors|length > 0 %}
-        <ul>
-            {% for author in authors %}
-                <li>
-                    <img src="{{ author.picture }}" alt="{{ author.username }}" width="80">
-                    <strong>{{ author.username|upper }}</strong> <br>
-                    Email : {{ author.email }} <br>
-                    Nombre de livres : {{ author.nb_books }} <br>
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
-
-        <p><strong>Nombre d’auteurs :</strong> {{ authors|length }}</p>
-        <p><strong>Total des livres :</strong>
-            {{ authors|map(a => a.nb_books)|reduce((carry, v) => carry + v) }}
-        </p>
-    {% else %}
-        <p>Aucun auteur trouvé.</p>
-    {% endif %}
-</body>
-</html>
+{# templates/author/list.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}Authors{% endblock %}
+{% block body %}
+<h2>Liste des auteurs</h2>
+<table border="1" cellpadding="6">
+    <tr><th>Id</th><th>Username</th><th>Email</th><th>Nb books</th><th>Actions</th></tr>
+    {% for a in authors %}
+        <tr>
+            <td>{{ a.id }}</td>
+            <td>{{ a.username }}</td>
+            <td>{{ a.email }}</td>
+            <td>{{ a.nbBooks }}</td>
+            <td>
+                <a href="{{ path('author_edit',{'id':a.id}) }}">edit</a> |
+                <a href="{{ path('author_delete',{'id':a.id}) }}" onclick="return confirm('Sure?')">delete</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+<a href="{{ path('author_add') }}">Add new author</a>
+{% endblock %}

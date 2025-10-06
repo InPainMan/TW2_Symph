@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block title %}Books{% endblock %}
+{% block body %}
+<h2>Liste des livres publiés</h2>
+<p>Nombre de livres publiés : {{ nbPub }} – non publiés : {{ nbUnpub }}</p>
+{% if books|length == 0 %}
+    <p>No Books found</p>
+{% else %}
+<table border="1" cellpadding="6">
+    <tr><th>Id</th><th>Title</th><th>Category</th><th>Author</th><th>Actions</th></tr>
+    {% for b in books %}
+        <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.title }}</td>
+            <td>{{ b.category }}</td>
+            <td>{{ b.author.username }}</td>
+            <td>
+                <a href="{{ path('book_show',{'id':b.id}) }}">show</a> |
+                <a href="{{ path('book_edit',{'id':b.id}) }}">edit</a> |
+                <a href="{{ path('book_delete',{'id':b.id}) }}" onclick="return confirm('Sure?')">delete</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+<br><a href="{{ path('book_add') }}">Add new book</a>
+{% endblock %}
